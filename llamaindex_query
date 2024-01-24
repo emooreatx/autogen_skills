@@ -8,8 +8,8 @@ logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 logging.getLogger().addHandler(logging.StreamHandler(stream=sys.stdout))
 
 # Define the path to the documents and the storage directory
-DOCUMENTS_DIR = "docs/bitsavers_sel_810"
-PERSIST_DIR = "./storage"
+DOCUMENTS_DIR = "/home/emoore/ccmp_ai/docs/bitsavers_sel_810"
+PERSIST_DIR = "/home/emoore/ccmp_ai/storage"
 
 # Check if the storage directory already exists
 if not os.path.exists(PERSIST_DIR):
