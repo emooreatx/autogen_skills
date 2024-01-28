@@ -7,11 +7,11 @@ import os
 def setup_logging():
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
-def create_or_load_index(documents_dir, persist_dir):
+def index_and_query(documents_dir, persist_dir, query_text):
     setup_logging()
     try:
         if not os.path.exists(persist_dir):
-            logging.info("Persist directory does not exist. Creating index.")
+            logging.info("Persist directory does not exist. Creating and persisting index.")
             documents = SimpleDirectoryReader(documents_dir).load_data()
             index = VectorStoreIndex.from_documents(documents)
             index.storage_context.persist(persist_dir=persist_dir)
@@ -19,18 +19,16 @@ def create_or_load_index(documents_dir, persist_dir):
             logging.info("Persist directory exists. Loading index.")
             storage_context = StorageContext.from_defaults(persist_dir=persist_dir)
             index = load_index_from_storage(storage_context)
-        return index
+        
+        if index is not None:
+            query_engine = index.as_query_engine()
+            response = query_engine.query(query_text)
+            return response
+        else:
+            logging.error("Failed to create or load index.")
+            return None
     except Exception as e:
-        logging.error(f"Failed to create or load index: {e}")
-        return None
-
-def query_index(index, query):
-    if index is not None:
-        query_engine = index.as_query_engine()
-        response = query_engine.query(query)
-        return response
-    else:
-        logging.error("Index is not available for querying.")
+        logging.error(f"Error during indexing or querying: {e}")
         return None
 
 if __name__ == "__main__":
@@ -38,7 +36,8 @@ if __name__ == "__main__":
     PERSIST_DIR = "/home/emoore/ccmp_ai/storage"
     query_text = "what was the cycle time for the SEL 810A?"
 
-    index = create_or_load_index(DOCUMENTS_DIR, PERSIST_DIR)
-    response = query_index(index, query_text)
+    response = index_and_query(DOCUMENTS_DIR, PERSIST_DIR, query_text)
     if response is not None:
         print(response)
+    else:
+        logging.error("No response received from the query.")
