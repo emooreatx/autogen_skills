@@ -5,6 +5,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.common.exceptions import WebDriverException
 from webdriver_manager.chrome import ChromeDriverManager
 import time
+from selenium.webdriver.common.by import By
 
 def search_and_extract_content(search_query, save_path='./', filename='search_results.json'):
     binary_path = '/opt/chromedriver' if os.path.exists('/opt/chromedriver') else None
@@ -22,10 +23,11 @@ def search_and_extract_content(search_query, save_path='./', filename='search_re
         time.sleep(2)  # Wait for the page to load
 
         # Find the search box, enter the search query, and submit
-        search_box = driver.find_element_by_name('q')
+        search_box = driver.find_element(By.NAME, 'q')
         search_box.send_keys(search_query)
         search_box.submit()
         time.sleep(5)  # Wait for search results to load
+
 
         # Extract text and URLs from the page
         page_text = driver.find_element_by_tag_name('body').text
