@@ -28,15 +28,13 @@ def search_and_extract_content(search_query, save_path='./', filename='search_re
         search_box.submit()
         time.sleep(5)  # Wait for search results to load
 
-
-        # Extract text and URLs from the page
-        page_text = driver.find_element_by_tag_name('body').text
-        links = driver.find_elements_by_tag_name('a')
-        urls = {link.text: link.get_attribute('href') for link in links if link.text and link.get_attribute('href')}
-
-        # Extract image links and alt text
-        images = driver.find_elements_by_tag_name('img')
-        image_info = {img.get_attribute('src'): img.get_attribute('alt') for img in images if img.get_attribute('src')}
+        page_text = driver.find_element(By.TAG_NAME, 'body').text  
+        links = driver.find_elements(By.TAG_NAME, 'a')  
+        urls = {link.text: link.get_attribute('href') for link in links if link.text and link.get_attribute('href')}  
+  
+        # Extract image links and alt text  
+        images = driver.find_elements(By.TAG_NAME, 'img')  
+        image_info = {img.get_attribute('src'): img.get_attribute('alt') for img in images if img.get_attribute('src')}  
 
         content = {
             'text': page_text,
