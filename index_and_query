@@ -5,7 +5,7 @@ import sys
 import os
 
 def setup_logging():
-    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+    logging.basicConfig(stream=sys.stdout, level=logging.WARNING)
 
 def index_and_query(documents_dir, persist_dir, query_text):
     setup_logging()
