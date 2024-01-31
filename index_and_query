@@ -1,4 +1,3 @@
-# filename: document_indexer.py
 from llama_index import VectorStoreIndex, SimpleDirectoryReader, StorageContext, load_index_from_storage
 import logging
 import sys
