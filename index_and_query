@@ -22,13 +22,25 @@ def index_and_query(documents_dir, persist_dir, query_text):
         if index is not None:
             query_engine = index.as_query_engine()
             response = query_engine.query(query_text)
-            return response
+        if response is not None:
+            print("Response object type:", type(response))
+            print("Response object attributes:", dir(response))
+        if hasattr(response, 'response'):
+            print("Query Response:")
+            print(response.response)
+    else:
+        print("The response object does not have a 'response' attribute.")
+else:
+    print("No response received from the query.")
         else:
             logging.error("Failed to create or load index.")
             return None
     except Exception as e:
         logging.error(f"Error during indexing or querying: {e}")
         return None
+response = index_and_query(documents_dir, persist_dir, query_text)
+
+# Check if the response is not None and print the contents of the 'response' attribute
 
 if __name__ == "__main__":
     DOCUMENTS_DIR = "/home/emoore/ccmp_ai/docs/bitsavers_sel_810"
